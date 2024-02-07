@@ -72,7 +72,8 @@ public class Inventory {
                 parts[3],                    // Model
                 parts[4],                    // Type
                 parts[5],                    // Back Wood
-                parts[6]                     // Top Wood
+                parts[6],                     // Top Wood
+                Integer.parseInt(parts[7])               // Number of Strings
         );
     }
 
