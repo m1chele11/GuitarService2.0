@@ -26,7 +26,7 @@ public class Guitar {
         this.topWood = topWood;
     }
 
-    public Guitar(String serialNumber, double price, String builder, String model, String type, String backWood, String topWood, Integer numStrings) {
+    public Guitar(String serialNumber, double price, String builder, String model, String type, String backWood, String topWood) {
         this.serialNumber = serialNumber;
         this.price = price;
         this.builder = builder;

@@ -31,7 +31,7 @@ public class InventoryController {
             @RequestParam(required = false) double price
 
     ) {
-        Guitar searchGuitar = new Guitar(null, price, builder, model, type, backWood, topWood, numStrings);
+        Guitar searchGuitar = new Guitar(null, price, builder, model, type, backWood, topWood);
         return inventory.search(searchGuitar);
     }
 
