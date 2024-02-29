@@ -73,6 +73,7 @@ public class Inventory {
                 parts[4],                    // Type
                 parts[5],                    // Back Wood
                 parts[6]                     // Top Wood
+                // Number of Strings
         );
     }
 

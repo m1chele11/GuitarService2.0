@@ -8,6 +8,23 @@ public class Guitar {
     String type;
     String backWood;
     String topWood;
+    Integer numStrings;
+
+    public void setBuilder(String builder) {
+        this.builder = builder;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBackWood(String backWood) {
+        this.backWood = backWood;
+    }
+
+    public void setTopWood(String topWood) {
+        this.topWood = topWood;
+    }
 
     public Guitar(String serialNumber, double price, String builder, String model, String type, String backWood, String topWood) {
         this.serialNumber = serialNumber;
@@ -17,6 +34,16 @@ public class Guitar {
         this.type = type;
         this.backWood = backWood;
         this.topWood = topWood;
+        this.numStrings = numStrings;
+
+    }
+
+    public Integer getNumStrings() {
+        return numStrings;
+    }
+
+    public void setNumStrings(Integer numStrings) {
+        this.numStrings = numStrings;
     }
 
     public String getSerialNumber() {
