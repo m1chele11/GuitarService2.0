@@ -28,13 +28,13 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<configuration>
-		<includes>
-			<include>
-				edu.iu.mbarrant.C322-Homework2.InventoryTest
-			</include>
-		</includes>
-	</configuration>
+<!--	<configuration>-->
+<!--		<includes>-->
+<!--			<include>-->
+<!--				edu.iu.mbarrant.C322-Homework2.InventoryTest-->
+<!--			</include>-->
+<!--		</includes>-->
+<!--	</configuration>-->
 
 	<build>
 		<plugins>
