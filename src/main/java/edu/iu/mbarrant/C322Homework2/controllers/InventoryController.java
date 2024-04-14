@@ -3,93 +3,88 @@ package edu.iu.mbarrant.C322Homework2.controllers;
 
 import edu.iu.mbarrant.C322Homework2.Guitar;
 import edu.iu.mbarrant.C322Homework2.Inventory;
+import edu.iu.mbarrant.C322Homework2.model.GuitarData;
+import edu.iu.mbarrant.C322Homework2.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/inventory")
-public class InventoryController {
+public class InventoryController{
 
-    private final Inventory inventory;
-
-    @Autowired
-    public InventoryController(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
-    @GetMapping("/search")
-    public List<Guitar> searchGuitars(
-            @RequestParam(required = false) String serialNumber,
-            @RequestParam(required = false) String builder,
-            @RequestParam(required = false) String model,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) Integer numStrings,
-            @RequestParam(required = false) String backWood,
-            @RequestParam(required = false) String topWood,
-            @RequestParam(required = false) double price
-
-    ) {
-        Guitar searchGuitar = new Guitar(null, price, builder, model, type, backWood, topWood);
-        return inventory.search(searchGuitar);
-    }
-
-    @PostMapping("/add")
-    public void addGuitar(@RequestBody Guitar guitar) {
-        inventory.addGuitar(guitar);
-    }
-
-    @GetMapping("/find/{serialNumber}")
-    public Guitar findGuitar(@PathVariable String serialNumber) {
-        return inventory.getGuitar(serialNumber);
+    private InventoryRepository inventoryRepository;
+    public InventoryController(InventoryRepository inventoryRepository){
+        this.inventoryRepository = inventoryRepository;
     }
 
 
-
-    public enum Builder {
-        FENDER, MARTIN, GIBSON, COLLINGS, OLSON, RYAN, PRS, ANY;
-        public String toString() {
-            switch(this) {
-                case FENDER:   return "Fender";
-                case MARTIN:   return "Martin";
-                case GIBSON:   return "Gibson";
-                case COLLINGS: return "Collings";
-                case OLSON:    return "Olson";
-                case RYAN:     return "Ryan";
-                case PRS:      return "PRS";
-                default:       return "Unspecified";
-            }
+    @GetMapping
+    public List<GuitarData> findAll(){
+        try{
+            return inventoryRepository.findAll();
+        } catch (IOException e){
+            return null;
         }
     }
 
-    public enum Type {
-        ACOUSTIC, ELECTRIC;
-        public String toString() {
-            switch(this) {
-                case ACOUSTIC: return "acoustic";
-                case ELECTRIC: return "electric";
-                default:       return "Unspecified";
-            }
+
+    @PostMapping
+    public boolean add(@RequestBody GuitarData data){
+        try{
+            System.out.println("Adding guitar to inventory: " + data.serialNumber());
+            return inventoryRepository.add(data);
+        } catch (IOException e){
+            throw new RuntimeException(e);
         }
     }
 
-    public enum Wood {
-        INDIAN_ROSEWOOD, BRAZILIAN_ROSEWOOD, MAHOGANY, MAPLE,
-        COCOBOLO, CEDAR, ADIRONDACK, ALDER, SITKA;
-        public String toString() {
-            switch(this) {
-                case INDIAN_ROSEWOOD:    return "Indian Rosewood";
-                case BRAZILIAN_ROSEWOOD: return "Brazilian Rosewood";
-                case MAHOGANY:           return "Mahogany";
-                case MAPLE:              return "Maple";
-                case COCOBOLO:           return "Cocobolo";
-                case CEDAR:              return "Cedar";
-                case ADIRONDACK:         return "Adirondack";
-                case ALDER:              return "Alder";
-                case SITKA:              return "Sitka";
-                default:                 return "Unspecified";
+    @GetMapping("/{serialNumber}")
+    public ResponseEntity<GuitarData> find(@PathVariable String serialNumber){
+        try{
+            GuitarData guitar = inventoryRepository.find(serialNumber);
+            if(guitar != null){
+                return ResponseEntity
+                        .status(HttpStatus.FOUND)
+                        .body(guitar);
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(null);
             }
+        } catch (IOException e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
+
+//    @GetMapping("/find")
+//    public GuitarData getGuitar(@RequestParam String serialNumber) {
+//        try {
+//            FileReader r = new FileReader("guitars_database.txt");
+//            BufferedReader bufferedReader = new BufferedReader(r);
+//
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] guitarData = line.split(",");
+//                if (guitarData[0].equals(serialNumber)) {
+//                    return new GuitarData(guitarData[0], Double.parseDouble(guitarData[1]), guitarData[2],
+//                            guitarData[3], guitarData[4], guitarData[5], guitarData[6]);
+//                }
+//            }
+//            bufferedReader.close();
+//            r.close();
+//            return null;
+//        } catch (IOException e) {
+//            System.err.println("Error reading file: " + e.getMessage());
+//            return null;
+//        }
+//    }
+
 }
